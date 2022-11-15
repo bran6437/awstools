@@ -4,11 +4,11 @@ function DownloadGitHubRepository
     param(
        [Parameter()]
        [string]
-       $Name = 'awstools',
+       $Name,
 
        [Parameter()]
        [string]
-       $Author = 'bran6437',
+       $Author,
 
        [Parameter()]
        [string] $Branch = "main",
@@ -38,4 +38,4 @@ function DownloadGitHubRepository
     Remove-Item -Path $ZipFile -Force
 }
 
-DownloadGitHubRepository
+DownloadGitHubRepository -Name awstools -Author bran6437 -Branch main -Location "$env:USERPROFILE\Documents"
