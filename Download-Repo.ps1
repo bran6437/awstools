@@ -2,18 +2,21 @@
 function DownloadGitHubRepository
 {
     param(
-       [Parameter(Mandatory=$True)]
-       [string] $Name,
+       [Parameter()]
+       [string]
+       $Name = 'awstools',
 
-       [Parameter(Mandatory=$True)]
-       [string] $Author,
+       [Parameter()]
+       [string]
+       $Author = 'bran6437',
 
-       [Parameter(Mandatory=$False)]
-       [string] $Branch = "master",
+       [Parameter()]
+       [string] $Branch = "main",
 
-       [Parameter(Mandatory=$False)]
-       [string] $Location = "c:\temp"
+       [Parameter()]
+       [string] $Location = "$env:USERPROFILE\Documents"
     )
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
     # Force to create a zip file
     $ZipFile = "$location\$Name.zip"
@@ -35,4 +38,4 @@ function DownloadGitHubRepository
     Remove-Item -Path $ZipFile -Force
 }
 
-DownloadGitHubRepository -Name awstools -Author bran6437 -Branch main -Location $pwd.Path
+DownloadGitHubRepository
