@@ -20,22 +20,23 @@ function DownloadGitHubRepository
 
     # Force to create a zip file
     $ZipFile = "$location\$Name.zip"
-    New-Item $ZipFile -ItemType File -Force
+    New-Item $ZipFile -ItemType File -Force | Out-Null
 
-    #$RepositoryZipUrl = "https://github.com/sandroasp/Microsoft-Integration-and-Azure-Stencils-Pack-for-Visio/archive/master.zip"
     $RepositoryZipUrl = "https://api.github.com/repos/$Author/$Name/zipball/$Branch"
+
     # download the zip
-    Write-Host 'Starting downloading the GitHub Repository'
+    Write-Host 'Downloading the GitHub Repository'
     Invoke-RestMethod -Uri $RepositoryZipUrl -OutFile $ZipFile
     Write-Host 'Download finished'
 
     #Extract Zip File
-    Write-Host 'Starting unzipping the GitHub Repository locally'
-    Expand-Archive -Path $ZipFile -DestinationPath $location -Force
-    Write-Host 'Unzip finished'
+    Write-Host 'Unzipping the GitHub Repository locally'
+    $unzip = Expand-Archive -Path $ZipFile -DestinationPath $location -Force -PassThru -Verbose
+    $newRepo = $unzip | Where-Object { $_.attributes -match 'Directory' -and $_.basename -match "$author-$name-" }
+    Write-Host "Unzip finished. Enjoy.`n$($newRepo.FullName) "
 
     # remove the zip file
-    Remove-Item -Path $ZipFile -Force
+    Remove-Item -Path $ZipFile -Force -ErrorAction SilentlyContinue
 }
 
 DownloadGitHubRepository -Name awstools -Author bran6437 -Branch main -Location "$env:USERPROFILE\Documents"
